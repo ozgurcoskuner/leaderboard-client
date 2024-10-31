@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
 
 const Leaderboard: React.FC = React.memo(() => {
   const [leaderboardData, setLeaderboardData] = useState(null);
@@ -24,7 +25,14 @@ const Leaderboard: React.FC = React.memo(() => {
 
   return (
     <div>
-      {leaderboardData && <p>{JSON.stringify(leaderboardData, null, 2)}</p>}
+      <Grid data={leaderboardData}>
+        <Column field="rank" title="Rank" />
+        <Column field="playerId" title="ID" />
+        <Column field="username" title="Username" />
+        <Column field="country" title="Country" />
+        <Column field="weeklyMoney" title="Money" />
+        <Column field="dailyDiff" title="Daily Diff" />
+      </Grid>
     </div>
   );
 });
