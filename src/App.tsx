@@ -2,11 +2,7 @@ import "./App.css";
 import Leaderboard from "./components/Leaderboard";
 
 function App() {
-  return (
-    <>
-      <Leaderboard />
-    </>
-  );
+  return <Leaderboard />;
 }
 
 export default App;
