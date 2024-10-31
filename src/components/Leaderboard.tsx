@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { Grid, GridColumn as Column } from "@progress/kendo-react-grid";
-
+import {
+  Grid,
+  GridCellProps,
+  GridColumn as Column,
+} from "@progress/kendo-react-grid";
+import "@progress/kendo-theme-default/dist/all.css";
 const Leaderboard: React.FC = React.memo(() => {
   const [leaderboardData, setLeaderboardData] = useState(null);
 
@@ -23,6 +27,15 @@ const Leaderboard: React.FC = React.memo(() => {
     };
   }, []);
 
+  const dailyDiffCell = (props: GridCellProps) => {
+    const dailyDiff = props.dataItem.dailyDiff;
+    const style = {
+      color: dailyDiff > 0 ? "green" : dailyDiff < 0 ? "red" : "yellow",
+    };
+
+    return <td style={style}>{Math.abs(dailyDiff)}</td>;
+  };
+
   return (
     <div>
       <Grid data={leaderboardData}>
@@ -31,7 +44,7 @@ const Leaderboard: React.FC = React.memo(() => {
         <Column field="username" title="Username" />
         <Column field="country" title="Country" />
         <Column field="weeklyMoney" title="Money" />
-        <Column field="dailyDiff" title="Daily Diff" />
+        <Column field="dailyDiff" title="Daily Diff" cell={dailyDiffCell} />
       </Grid>
     </div>
   );
