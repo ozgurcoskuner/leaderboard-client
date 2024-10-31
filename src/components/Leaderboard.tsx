@@ -9,28 +9,34 @@ import "@progress/kendo-theme-default/dist/all.css";
 import {
   CONNECT_EVENT,
   LEADERBOARD_DATA_EVENT,
+  LEADERBOARD_UPDATE_EVENT,
   REGISTER_PLAYER_EVENT,
 } from "../constants";
 import { LeaderboardData } from "./types";
 const Leaderboard: React.FC = React.memo(() => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
+  const [playerId] = useState("123");
 
   useEffect(() => {
     const socket = io("http://localhost:4000");
 
     socket.on(CONNECT_EVENT, () => {
-      socket.emit(REGISTER_PLAYER_EVENT, "123");
+      socket.emit(REGISTER_PLAYER_EVENT, playerId);
     });
 
     socket.on(LEADERBOARD_DATA_EVENT, (data: LeaderboardData[]) => {
       setLeaderboardData(data);
     });
+    socket.on(LEADERBOARD_UPDATE_EVENT, () => {
+      socket.emit(REGISTER_PLAYER_EVENT, playerId);
+    });
 
     return () => {
       socket.off(LEADERBOARD_DATA_EVENT);
+      socket.off(LEADERBOARD_UPDATE_EVENT);
       socket.disconnect();
     };
-  }, []);
+  }, [playerId]);
 
   const dailyDiffCell = (props: GridCellProps) => {
     const dailyDiff: number = props.dataItem.dailyDiff;
