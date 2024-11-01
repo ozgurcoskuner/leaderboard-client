@@ -13,3 +13,27 @@
 .k-table-th {
   font-weight: 700 !important;
 }
+
+.k-master-row:nth-child(1) {
+  background: gold;
+  pointer-events: none;
+}
+
+.k-master-row:nth-child(2) {
+  background: #add8e6 !important;
+  pointer-events: none;
+}
+
+.k-master-row:nth-child(3) {
+  background: #ce8946;
+  pointer-events: none;
+}
+
+.rank-cell {
+  font-weight: 600 !important;
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+}

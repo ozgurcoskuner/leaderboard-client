@@ -13,22 +13,23 @@ import {
   REGISTER_PLAYER_EVENT,
 } from "../constants";
 import { LeaderboardData } from "./types";
+import StarIcon from "../icons/Star";
 const Leaderboard: React.FC = React.memo(() => {
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardData[]>([]);
-  const [playerId] = useState("123");
+  const [selectedPlayerId] = useState("123");
 
   useEffect(() => {
-    const socket = io("http://localhost:4000");
+    const socket = io(import.meta.env.VITE_SERVER_URL);
 
     socket.on(CONNECT_EVENT, () => {
-      socket.emit(REGISTER_PLAYER_EVENT, playerId);
+      socket.emit(REGISTER_PLAYER_EVENT, selectedPlayerId);
     });
 
     socket.on(LEADERBOARD_DATA_EVENT, (data: LeaderboardData[]) => {
       setLeaderboardData(data);
     });
     socket.on(LEADERBOARD_UPDATE_EVENT, () => {
-      socket.emit(REGISTER_PLAYER_EVENT, playerId);
+      socket.emit(REGISTER_PLAYER_EVENT, selectedPlayerId);
     });
 
     return () => {
@@ -36,7 +37,7 @@ const Leaderboard: React.FC = React.memo(() => {
       socket.off(LEADERBOARD_UPDATE_EVENT);
       socket.disconnect();
     };
-  }, [playerId]);
+  }, [selectedPlayerId]);
 
   const dailyDiffCell = (props: GridCellProps) => {
     const dailyDiff: number = props.dataItem.dailyDiff;
@@ -47,9 +48,27 @@ const Leaderboard: React.FC = React.memo(() => {
     return <td style={style}>{Math.abs(dailyDiff)}</td>;
   };
 
+  const rankCell = (props: GridCellProps) => {
+    const playerId: string = props.dataItem.playerId;
+    const rank: number = props.dataItem.rank;
+    const isSelectedPlayer = playerId == selectedPlayerId;
+
+    return (
+      <td className="rank-cell">
+        {isSelectedPlayer ? (
+          <span>
+            {rank}. <StarIcon />
+          </span>
+        ) : (
+          rank + "."
+        )}
+      </td>
+    );
+  };
+
   return (
     <Grid data={leaderboardData}>
-      <Column field="rank" title="Rank" />
+      <Column field="rank" title="Rank" cell={rankCell} />
       <Column field="username" title="Username" />
       <Column field="country" title="Country" />
       <Column field="weeklyMoney" title="Money" />
