@@ -1,0 +1,15 @@
+.wrapper {
+  width: 80%;
+  margin: 40px auto;
+}
+.k-grid-content {
+  overflow-y: visible !important;
+}
+
+.k-grid-header {
+  padding-inline-end: 0 !important;
+}
+
+.k-table-th {
+  font-weight: 700 !important;
+}
