@@ -57,10 +57,10 @@ const Leaderboard: React.FC = React.memo(() => {
       <td className="rank-cell">
         {isSelectedPlayer ? (
           <span>
-            {rank}. <StarIcon />
+            {rank} <StarIcon />
           </span>
         ) : (
-          rank + "."
+          rank
         )}
       </td>
     );
